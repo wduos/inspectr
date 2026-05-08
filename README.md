@@ -1,6 +1,6 @@
 # inspectr
 
-This web interface provides a more intuitive and responsive experience for the warehouse receiving inspection process.
+This [web interface](https://wduos.github.io/inspectr/) provides a more intuitive and responsive experience for the warehouse receiving inspection process.
 
 This repository is currently public to allow for potential code reviews and inspections. I intentionally chose a simple HTML, CSS, and JavaScript stack instead of a more sophisticated approach in order to prioritize simplicity and ensure easy deployment through GitHub Pages.
 
