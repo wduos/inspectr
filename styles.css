@@ -1,0 +1,64 @@
+:root {
+  --accent: #167bd3;
+  --dark: #28292a;
+  --dim: #565b61;
+  --light: #edf0f4;
+}
+
+@font-face {
+  font-family: "Cocogoose";
+  src: url("./assets/fonts/cocogoose/Cocogoose-Darkmode.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Montserrat";
+  src: url("./assets/fonts/montserrat/Montserrat-VariableFont_wght.ttf")
+    format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+.dim {
+  color: var(--dim);
+}
+
+h1 {
+  margin: 0.5rem;
+  font-family: "Cocogoose";
+  color: var(--accent);
+  font-size: 2.5rem;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+}
+
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: inherit;
+  height: inherit;
+}
+#ref-sku-input {
+  margin: 1rem;
+  padding: 0.5rem;
+  width: 7.4rem;
+  border-radius: 0.5rem;
+  border: solid 2px var(--dim);
+  background-color: var(--light);
+  font-size: 1rem;
+  transition: border 0.3s ease-out;
+}
+#ref-sku-input:focus {
+  outline: none;
+  border: solid 2px var(--accent);
+}
