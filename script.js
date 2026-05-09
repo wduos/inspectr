@@ -60,5 +60,18 @@ document
     clickySound(now, 1000);
     clickySound(now + 0.12, 1700);
 
+    document.getElementById("ref-sku-input").value = "";
+
     showElements(["new-inspect-modal-mask", "new-inspect-modal"]);
   });
+
+document.getElementById("resume-inspect-btn").addEventListener("click", () => {
+  console.log(localStorage.getItem("referenceSKU")); //temp
+});
+
+document.getElementById("ref-sku-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const SKU = e.target.elements[0].value;
+  localStorage.setItem("referenceSKU", SKU);
+});

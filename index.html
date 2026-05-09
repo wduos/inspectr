@@ -11,15 +11,14 @@
     <main>
       <section id="init-prompt">
         <img src="./assets/graphics/logo.svg" alt="Logomarca inspectr" />
-        <button id="new-inspect-btn" class="dark-btn" type="button">
+        <button id="new-inspect-btn" class="accent-btn" type="button">
           Nova conferência
           <img
             src="./assets/graphics/icon-scan.svg"
             alt="ícone de código de barras"
           />
         </button>
-        <small class="dim center">ou</small>
-        <button type="button" class="clear-btn">
+        <button id="resume-inspect-btn" type="button" class="clear-btn">
           Continuar uma conferência anterior
           <img
             src="./assets/graphics/icon-reverse-clock.svg"
@@ -35,19 +34,26 @@
     <div id="new-inspect-modal">
       <small class="uppercase dim">Nova Conferência</small>
       <p class="center">Digite ou escaneie a primeira SKU neste pallet</p>
-      <div>
-        <input type="text" placeholder="(240)10221234" />
-        <button class="dark-btn" type="button">Confirmar SKU</button>
-        <button
-          onclick="
-            hideElements(['new-inspect-modal', 'new-inspect-modal-mask'])
-          "
-          class="clear-btn"
-          type="button"
-        >
-          Cancelar
-        </button>
-      </div>
+      <form id="ref-sku-form" action="">
+        <input
+          type="text"
+          id="ref-sku-input"
+          placeholder="(240)10221234"
+          maxlength="13"
+          minlength="13"
+          pattern="^\(240\)\d{8}$"
+          title="Escaneie somente uma SKU válida"
+          required
+        />
+        <input class="accent-btn" type="submit" value="Confirmar" />
+      </form>
+      <button
+        onclick="hideElements(['new-inspect-modal', 'new-inspect-modal-mask'])"
+        class="clear-btn"
+        type="button"
+      >
+        Cancelar
+      </button>
     </div>
     <script src="./script.js"></script>
   </body>

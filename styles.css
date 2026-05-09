@@ -1,6 +1,12 @@
 :root {
-  --shadow: 3px 3px 1px rgba(0, 0, 0, 0.2);
-  --radius: 0.2rem;
+  --light-tint: #eef8f3;
+  --accent: #16b46a;
+  --accent-opaque: #16b46a4c;
+  --dim: #6a8e81;
+  --dark: #36403c;
+  --darker: #2b2e2d;
+  --shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+  --radius: 0.5rem;
 }
 
 @font-face {
@@ -25,35 +31,36 @@
   color: var(--dim);
 }
 
-.dark-btn {
-  background-color: black;
+.accent-btn {
+  background-color: var(--accent);
   color: white;
 }
 
 .clear-btn {
   background-color: white;
-  color: black;
+  outline: 2px solid var(--accent-opaque);
 }
 
 button {
-  display: block;
-  margin: auto;
-  height: 2.5rem;
-  padding-inline: 1rem;
+  width: calc(100% - 1rem);
+  height: 3rem;
   border: none;
-  text-align: center;
   border-radius: var(--radius);
-  border: solid 2px rgba(0, 0, 0, 0.5);
-  box-shadow: var(--shadow);
+  box-shadow: 0px 0px 10px var(--accent-opaque);
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
   cursor: pointer;
 }
 
 body {
-  height: calc(100vh - 3.75rem - 1px);
   margin: 0;
   padding: 0;
+  width: 100vw;
+  height: 100vh;
   box-sizing: border-box;
   font-family: "Raleway", sans-serif;
+  color: var(--darker);
   overflow: hidden;
 }
 
@@ -65,22 +72,28 @@ main {
   height: inherit;
 }
 
+#init-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+  width: inherit;
+  padding: 0.5rem;
+}
 #init-prompt > img {
   height: 3rem;
-  display: block;
-  margin: auto;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
 }
 #init-prompt > button {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.4rem;
+  max-width: 400px;
 }
 #init-prompt > button > img {
-  height: 0.8rem;
-}
-#init-prompt > small {
-  margin-block: 0.5rem;
+  height: 1rem;
 }
 
 #new-inspect-modal-mask {
@@ -104,26 +117,37 @@ main {
   border-radius: var(--radius);
   background-color: white;
   transform: translate(-50%, -50%);
-  z-index: 10;
+  z-index: 11;
 }
 #new-inspect-modal > small {
-  display: inline-block;
-  padding: 0.2rem 0.4rem 0.2rem 1rem;
-  border-radius: var(--radius);
-  background-color: black;
-  color: white;
-  transform: translateX(-1.5rem);
+  font-weight: 600;
+  color: var(--dim);
 }
-#new-inspect-modal > div {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-#new-inspect-modal > div > input {
+#new-inspect-modal > form > input[type="text"] {
   display: block;
   margin: auto;
   height: 2.5rem;
   padding-inline: 1rem;
-  border: solid 2px rgba(0, 0, 0, 0.5);
+  border: solid 2px var(--dim);
   border-radius: var(--radius);
+  background-color: var(--light-tint);
+  font-size: 1rem;
+}
+#new-inspect-modal > form > input[type="text"]:focus {
+  outline: solid 2px var(--accent-opaque);
+  border: solid 2px var(--accent);
+}
+#new-inspect-modal > form > input[type="submit"] {
+  width: 100%;
+  height: 3rem;
+  margin-block: 1rem;
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: 0px 0px 10px var(--accent-opaque);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+#new-inspect-modal > button {
+  width: 100%;
 }
