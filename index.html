@@ -19,14 +19,14 @@
         </div>
         <img src="./assets/graphics/logo-v2.svg" alt="Logomarca inspectr" />
         <small class="center">Conferências mais eficientes</small>
-        <button id="new-inspect-btn" class="accent-btn" type="button">
+        <button id="new-inspect-btn" class="accent-btn button" type="button">
           Começar
           <img
             src="./assets/graphics/icon-scan.svg"
             alt="ícone de código de barras"
           />
         </button>
-        <button id="resume-inspect-btn" type="button" class="clear-btn">
+        <button id="resume-inspect-btn" type="button" class="clear-btn button">
           Retomar conferência
           <img
             src="./assets/graphics/icon-reverse-clock.svg"
@@ -34,8 +34,38 @@
           />
         </button>
       </section>
+
+      <section id="set-sku-sect">
+        <h2>
+          <img src="./assets/graphics/icon-scan-alt.svg" alt="" />
+          Nova Conferência
+        </h2>
+        <form id="ref-sku-form" action="">
+          <input
+            type="text"
+            id="ref-sku-input"
+            placeholder="Ex.: (240)10221234"
+            maxlength="13"
+          />
+          <p id="ref-sku-msg" class="center">
+            Escaneie a <span class="bold">SKU</span> de qualquer caixa do pallet
+            para iniciar a conferência.
+          </p>
+          <div class="action-btns-container">
+            <small class="center dim">Somente SKUs válidas serão aceitas</small>
+            <input class="accent-btn button" type="submit" value="Confirmar" />
+            <button
+              id="cancel-set-sku-btn"
+              class="clear-btn button"
+              type="button"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </section>
     </main>
-    <div
+    <!-- <div
       id="new-inspect-modal-mask"
       onclick="hideElements(['new-inspect-modal', 'new-inspect-modal-mask'])"
     ></div>
@@ -62,7 +92,7 @@
       >
         Cancelar
       </button>
-    </div>
+    </div> -->
     <script src="./script.js"></script>
   </body>
 </html>

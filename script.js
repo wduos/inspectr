@@ -1,4 +1,7 @@
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
+const refSKUForm = document.getElementById("ref-sku-form");
+const refSKUInput = document.getElementById("ref-sku-input");
+const refSKUMsg = document.getElementById("ref-sku-msg");
 
 function clickySound(time, freq) {
   const o = ctx.createOscillator();
@@ -50,6 +53,33 @@ function showElements(elementIDs) {
   });
 }
 
+function validateSKU(barcode) {
+  const pattern = /^\(240\)\d{8}$/;
+
+  if (!barcode) {
+    return "A SKU é obrigatória";
+  }
+
+  if (!pattern.test(barcode)) {
+    return "Escaneie uma SKU válida";
+  }
+
+  if (barcode.length < 13 || barcode.length > 13) {
+    return "A SKU deve ter exatamente 13 caracteres";
+  }
+
+  return null;
+}
+
+function resetSKUInput() {
+  refSKUInput.value = "";
+  refSKUInput.classList.remove("red-input");
+  refSKUMsg.classList.remove("red");
+  refSKUMsg.innerHTML =
+    "Escaneie a <span class='bold'>SKU</span> de qualquer caixa do pallet para iniciar a conferência.";
+}
+
+// #init-prompt
 document
   .getElementById("new-inspect-btn")
   .addEventListener("click", async () => {
@@ -59,19 +89,46 @@ document
 
     clickySound(now, 1000);
     clickySound(now + 0.12, 1700);
+    clickySound(now + 0.2, 2300);
 
-    document.getElementById("ref-sku-input").value = "";
+    resetSKUInput();
 
-    showElements(["new-inspect-modal-mask", "new-inspect-modal"]);
+    showElements(["set-sku-sect"]);
   });
 
 document.getElementById("resume-inspect-btn").addEventListener("click", () => {
   console.log(localStorage.getItem("referenceSKU")); //temp
 });
 
-document.getElementById("ref-sku-form").addEventListener("submit", (e) => {
+// #set-sku-sect
+document
+  .getElementById("cancel-set-sku-btn")
+  .addEventListener("click", async () => {
+    await ctx.resume();
+
+    const now = ctx.currentTime;
+
+    clickySound(now, 2300);
+    clickySound(now + 0.2, 1000);
+
+    hideElements(["set-sku-sect"]);
+  });
+
+refSKUForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
   const SKU = e.target.elements[0].value;
+
+  const error = validateSKU(SKU);
+
+  if (error) {
+    refSKUInput.value = "";
+    refSKUInput.classList.add("red-input");
+    refSKUMsg.classList.add("red");
+    refSKUMsg.innerHTML = error;
+  } else {
+    resetSKUInput();
+  }
+
   localStorage.setItem("referenceSKU", SKU);
 });
