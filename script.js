@@ -36,8 +36,22 @@ function errorSound(time) {
   o.stop(time + 0.3);
 }
 
+function hideElements(elementIDs) {
+  elementIDs.forEach((elementID) => {
+    const el = document.getElementById(elementID);
+    el.style.display = "none";
+  });
+}
+
+function showElements(elementIDs) {
+  elementIDs.forEach((elementID) => {
+    const el = document.getElementById(elementID);
+    el.style.display = "block";
+  });
+}
+
 document
-  .getElementById("new-inpspect-btn")
+  .getElementById("new-inspect-btn")
   .addEventListener("click", async () => {
     await ctx.resume();
 
@@ -45,4 +59,6 @@ document
 
     clickySound(now, 1000);
     clickySound(now + 0.12, 1700);
+
+    showElements(["new-inspect-modal-mask", "new-inspect-modal"]);
   });

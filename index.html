@@ -4,28 +4,51 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>inspectr</title>
-    <link rel="favicon" href="./assets/graphics/favicon.svg" type="image/svg" />
+    <!-- <link rel="favicon" href="./assets/graphics/favicon.svg" type="image/svg" /> -->
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <header>
-      <img src="./assets/graphics/logo.svg" alt="Logomarca inspectr" />
-      <a href="https://github.com/wduos/inspectr" target="_blank">
-        <img
-          src="./assets/graphics/icon-terminal.svg"
-          alt="Ícone de terminal"
-        />
-      </a>
-    </header>
     <main>
       <section id="init-prompt">
-        <button id="new-inpspect-btn" type="button">
-          Começar nova conferência
+        <img src="./assets/graphics/logo.svg" alt="Logomarca inspectr" />
+        <button id="new-inspect-btn" class="dark-btn" type="button">
+          Nova conferência
+          <img
+            src="./assets/graphics/icon-scan.svg"
+            alt="ícone de código de barras"
+          />
         </button>
-        <small class="dim">ou</small>
-        <button type="button">Continuar uma conferência anterior</button>
+        <small class="dim center">ou</small>
+        <button type="button" class="clear-btn">
+          Continuar uma conferência anterior
+          <img
+            src="./assets/graphics/icon-reverse-clock.svg"
+            alt="ícone de relógio"
+          />
+        </button>
       </section>
     </main>
+    <div
+      id="new-inspect-modal-mask"
+      onclick="hideElements(['new-inspect-modal', 'new-inspect-modal-mask'])"
+    ></div>
+    <div id="new-inspect-modal">
+      <small class="uppercase dim">Nova Conferência</small>
+      <p class="center">Digite ou escaneie a primeira SKU neste pallet</p>
+      <div>
+        <input type="text" placeholder="(240)10221234" />
+        <button class="dark-btn" type="button">Confirmar SKU</button>
+        <button
+          onclick="
+            hideElements(['new-inspect-modal', 'new-inspect-modal-mask'])
+          "
+          class="clear-btn"
+          type="button"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
     <script src="./script.js"></script>
   </body>
 </html>
