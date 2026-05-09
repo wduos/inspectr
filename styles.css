@@ -1,4 +1,8 @@
 :root {
+  --green-tint: #f4fcf6;
+  --green: #39c252;
+  --green-alt: #329c46;
+  --green-opaque: #39c2524d;
   --red-tint: #fff7f7;
   --red: #e34e4e;
   --red-opaque: #e34e4e53;
@@ -44,6 +48,10 @@
 
 .red {
   color: var(--red) !important;
+}
+
+.green {
+  color: var(--green-alt) !important;
 }
 
 .center {
@@ -105,6 +113,16 @@
 .red-input:focus {
   outline: solid 2px var(--red-opaque) !important;
   box-shadow: 0px 0px 15px var(--red-opaque) !important;
+}
+
+.green-input {
+  border: solid 2px var(--green) !important;
+  background-color: var(--green-tint) !important;
+  color: var(--green-alt) !important;
+}
+.green-input:focus {
+  outline: solid 2px var(--green-opaque) !important;
+  box-shadow: 0px 0px 15px var(--green-opaque) !important;
 }
 
 input[type="text"] {

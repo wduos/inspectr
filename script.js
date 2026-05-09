@@ -74,27 +74,19 @@ function validateSKU(barcode) {
 function resetSKUInput() {
   refSKUInput.value = "";
   refSKUInput.classList.remove("red-input");
+  refSKUInput.classList.remove("green-input");
   refSKUMsg.classList.remove("red");
+  refSKUMsg.classList.remove("green");
   refSKUMsg.innerHTML =
     "Escaneie a <span class='bold'>SKU</span> de qualquer caixa do pallet para iniciar a conferência.";
 }
 
 // #init-prompt
-document
-  .getElementById("new-inspect-btn")
-  .addEventListener("click", async () => {
-    await ctx.resume();
+document.getElementById("new-inspect-btn").addEventListener("click", () => {
+  resetSKUInput();
 
-    const now = ctx.currentTime;
-
-    clickySound(now, 1000);
-    clickySound(now + 0.12, 1700);
-    clickySound(now + 0.2, 2300);
-
-    resetSKUInput();
-
-    showElements(["set-sku-sect"]);
-  });
+  showElements(["set-sku-sect"]);
+});
 
 document.getElementById("resume-inspect-btn").addEventListener("click", () => {
   console.log(localStorage.getItem("referenceSKU")); //temp
@@ -114,7 +106,7 @@ document
     hideElements(["set-sku-sect"]);
   });
 
-refSKUForm.addEventListener("submit", (e) => {
+refSKUForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const SKU = e.target.elements[0].value;
@@ -127,8 +119,23 @@ refSKUForm.addEventListener("submit", (e) => {
     refSKUMsg.classList.add("red");
     refSKUMsg.innerHTML = error;
   } else {
-    resetSKUInput();
-  }
+    refSKUInput.classList.add("green-input");
+    refSKUMsg.classList.add("green");
+    refSKUMsg.innerHTML = "Aceito";
 
-  localStorage.setItem("referenceSKU", SKU);
+    await ctx.resume();
+
+    const now = ctx.currentTime;
+
+    clickySound(now, 1000);
+    clickySound(now + 0.12, 1700);
+    clickySound(now + 0.2, 2300);
+
+    localStorage.setItem("referenceSKU", SKU);
+
+    setTimeout(() => {
+      hideElements(["set-sku-sect"]);
+      resetSKUInput();
+    }, 1500);
+  }
 });
