@@ -39,6 +39,25 @@ function errorSound(time) {
   o.stop(time + 0.3);
 }
 
+function blipSound(time) {
+  console.log("sdasd");
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+
+  o.type = "square";
+
+  o.frequency.setValueAtTime(10500, time);
+  o.frequency.exponentialRampToValueAtTime(2700, time + 0.0025);
+  g.gain.setValueAtTime(0.1, time);
+
+  g.gain.exponentialRampToValueAtTime(0.00001, time + 1.2);
+
+  o.connect(g).connect(ctx.destination);
+
+  o.start();
+  o.stop(time + 1.2);
+}
+
 function hideElements(elementIDs) {
   elementIDs.forEach((elementID) => {
     const el = document.getElementById(elementID);
@@ -83,6 +102,9 @@ function resetSKUInput() {
 
 // #init-prompt
 document.getElementById("new-inspect-btn").addEventListener("click", () => {
+  const now = ctx.currentTime;
+
+  blipSound(now);
   resetSKUInput();
 
   showElements(["set-sku-sect"]);
