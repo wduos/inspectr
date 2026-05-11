@@ -60,11 +60,11 @@ function pluckSound(time) {
   o.frequency.setValueAtTime(622.25, time + 0.11);
   o.frequency.setValueAtTime(783.99, time + 0.23);
 
-  g.gain.setValueAtTime(0.2, time);
+  g.gain.setValueAtTime(0.4, time);
   g.gain.exponentialRampToValueAtTime(0.00001, time + 0.1);
-  g.gain.setValueAtTime(0.2, time + 0.11);
+  g.gain.setValueAtTime(0.4, time + 0.11);
   g.gain.exponentialRampToValueAtTime(0.00001, time + 0.22);
-  g.gain.setValueAtTime(0.2, time + 0.23);
+  g.gain.setValueAtTime(0.4, time + 0.23);
   g.gain.exponentialRampToValueAtTime(0.00001, time + 0.5);
 
   o.connect(g).connect(ctx.destination);
@@ -262,6 +262,8 @@ newBarcodeForm.addEventListener("submit", (e) => {
 
     newBarcodeInput.value = "";
     newBarcodeInput.placeholder = error;
+    newBarcodeInput.classList.remove("green-input");
+    newBarcodeInput.classList.add("red-input");
 
     return;
   } else if (barcode !== currentReference) {
@@ -269,12 +271,16 @@ newBarcodeForm.addEventListener("submit", (e) => {
 
     newBarcodeInput.value = "";
     newBarcodeInput.placeholder = "A SKU é diferente da referência";
+    newBarcodeInput.classList.remove("green-input");
+    newBarcodeInput.classList.add("red-input");
 
     return;
   }
 
   blipSound(now);
   setBoxCounter(Number(localStorage.getItem("boxCount")) + 1);
+  newBarcodeInput.classList.remove("red-input");
+  newBarcodeInput.classList.add("green-input");
   newBarcodeInput.value = "";
 });
 
