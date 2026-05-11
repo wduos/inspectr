@@ -31,6 +31,7 @@ const finishModalDeclineActBtn = document.getElementById(
 const finishModalAcceptActBtn = document.getElementById(
   "finish-modal-accept-act-btn",
 );
+const toast = document.getElementById("toast");
 
 function clickySound(time, freq) {
   const o = ctx.createOscillator();
@@ -200,9 +201,36 @@ document.getElementById("new-inspect-btn").addEventListener("click", () => {
   showElements(["set-sku-sect"]);
 });
 
-document.getElementById("resume-inspect-btn").addEventListener("click", () => {
-  console.log(localStorage.getItem("referenceSKU")); //temp
-});
+document
+  .getElementById("resume-inspect-btn")
+  .addEventListener("click", async () => {
+    await ctx.resume();
+
+    const now = ctx.currentTime;
+
+    if (!localStorage.getItem("referenceSKU")) {
+      warnSound(now);
+
+      toast.style.top = "1rem";
+
+      setTimeout(() => {
+        toast.style.top = "-5rem";
+      }, 2000);
+
+      return;
+    }
+
+    clickySound(now, 1000);
+    clickySound(now + 0.12, 1700);
+    clickySound(now + 0.2, 2300);
+
+    newBarcodeInput.value = "";
+    newBarcodeInput.placeholder = "Leia um código de barras...";
+
+    refSKUDisplay.innerHTML = localStorage.getItem("referenceSKU");
+    boxCounter.innerHTML = localStorage.getItem("boxCount");
+    showElements(["inspection-interface-sect"]);
+  });
 
 // #set-sku-sect
 document.getElementById("cancel-set-sku-btn").addEventListener("click", () => {

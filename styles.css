@@ -324,3 +324,23 @@ main {
   box-shadow: 0px 0px 15px var(--accent-opaque);
   border: solid 1px var(--accent-opaque);
 }
+
+#toast {
+  position: absolute;
+  top: -5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.8rem;
+  background-color: var(--light-tint);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: solid 1px var(--accent-opaque);
+  transition: top 0.2s cubic-bezier(0.39, 0.36, 0.68, 1.44);
+}
+#toast > img {
+  height: 0.8rem;
+}
+#toast > small {
+  font-weight: 600;
+}
