@@ -310,6 +310,7 @@ newBarcodeForm.addEventListener("submit", (e) => {
   newBarcodeInput.classList.remove("red-input");
   newBarcodeInput.classList.add("green-input");
   newBarcodeInput.value = "";
+  newBarcodeInput.placeholder = "Leia um código de barras...";
 });
 
 cancelBtn.addEventListener("click", () => {
