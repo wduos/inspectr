@@ -371,6 +371,9 @@ finishModalDeclineActBtn.addEventListener("click", () => {
 });
 
 finishModalAcceptActBtn.addEventListener("click", () => {
+  newBarcodeInput.classList.remove("green-input");
+  newBarcodeInput.classList.remove("red-input");
+
   const now = ctx.currentTime;
 
   pluckSound(now);
