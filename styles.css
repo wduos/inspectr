@@ -7,6 +7,9 @@
   --red: #e34e4e;
   --red-opaque: #e34e4e53;
   --light-tint: #f9f7fd;
+  --yellow: #e3d74e;
+  --yellow-opaque: #e3d74e4f;
+  --light-tint: #f9f7fd;
   --accent: #794ee3;
   --accent-alt: #4e3caa;
   --accent-opaque: #784ee346;
@@ -16,15 +19,6 @@
   --shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
   --radius: 1rem;
   --radius-1: 0.5rem;
-}
-
-@font-face {
-  font-family: "Raleway";
-  src: url("./assets/fonts/raleway/Raleway-VariableFont_wght.ttf")
-    format("truetype");
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
 }
 
 @font-face {
@@ -46,27 +40,25 @@
   font-style: normal;
 }
 
+.accent {
+  color: var(--accent);
+}
 .red {
   color: var(--red) !important;
 }
-
 .green {
   color: var(--green-alt) !important;
 }
-
 .center {
   display: block;
   text-align: center;
 }
-
 .bold {
   font-weight: 700;
 }
-
 .uppercase {
   text-transform: uppercase;
 }
-
 .dim {
   color: var(--dim);
 }
@@ -87,10 +79,19 @@
   background-image: linear-gradient(45deg, var(--accent), var(--accent-alt));
   color: white;
 }
-
 .clear-btn {
   background-color: white;
   outline: 2px solid var(--accent-opaque);
+}
+.red-btn {
+  box-shadow: 0px 0px 10px var(--red-opaque);
+  background-color: var(--red);
+  color: white;
+}
+.yellow-btn {
+  box-shadow: 0px 0px 10px var(--yellow-opaque);
+  background-color: var(--yellow);
+  color: white;
 }
 
 .action-btns-container {
@@ -123,6 +124,25 @@
 .green-input:focus {
   outline: solid 2px var(--green-opaque) !important;
   box-shadow: 0px 0px 15px var(--green-opaque) !important;
+}
+
+.li-clear {
+  margin-right: 0.2rem;
+  padding-inline: 0.45rem;
+  border-radius: 50%;
+  background-color: var(--light-tint);
+  font-weight: 700;
+  color: var(--accent-alt);
+  box-shadow: var(--shadow);
+}
+.li-clear-alt {
+  margin-right: 0.2rem;
+  padding-inline: 0.54rem;
+  border-radius: 50%;
+  background-color: var(--light-tint);
+  font-weight: 700;
+  color: var(--accent-alt);
+  box-shadow: var(--shadow);
 }
 
 input[type="text"] {
@@ -225,4 +245,55 @@ main {
 }
 #set-sku-sect > h2 > img {
   height: 1rem;
+}
+
+#inspection-interface-sect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  width: calc(100% - 2rem);
+  height: 100vh;
+  padding: 1rem;
+  background-color: white;
+}
+#inspection-interface-sect > h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+#inspection-interface-sect > h2 > img {
+  height: 1rem;
+}
+#inspection-interface-sect > ol {
+  padding: 0;
+}
+
+#inspection-interface-sect > ol > li {
+  margin-bottom: 0.5rem;
+  color: var(--dim);
+  list-style: none;
+}
+#inspection-interface-sect > .action-btns-container > div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: calc(100% - 2rem);
+}
+#ref-sku-display {
+  margin: 0;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  user-select: none;
+}
+#new-barcode-input {
+  margin-bottom: 1rem;
+}
+#box-counter {
+  margin: 0;
+  font-size: 2.5rem;
 }

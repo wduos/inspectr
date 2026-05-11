@@ -37,7 +37,7 @@
 
       <section id="set-sku-sect">
         <h2>
-          <img src="./assets/graphics/icon-scan-alt.svg" alt="" />
+          <img src="./assets/graphics/icon-scan-alt.svg" alt="Ícone de scan" />
           Nova Conferência
         </h2>
         <form id="ref-sku-form" action="">
@@ -63,6 +63,52 @@
             </button>
           </div>
         </form>
+      </section>
+
+      <section id="inspection-interface-sect">
+        <h2>
+          <img
+            src="./assets/graphics/icon-box.svg"
+            alt="Ícone de caixa de papelão"
+          />
+          Conferindo pallet
+        </h2>
+        <p>Continue escaneando as outras caixas no pallet</p>
+        <ol>
+          <li>
+            <span class="li-clear-alt">1</span> Escaneie somente SKUs
+            <span class="bold">válidas</span>
+          </li>
+          <li>
+            <span class="li-clear">2</span> Todos as caixas precisam ter a
+            <span class="bold">mesma SKU</span>
+          </li>
+          <li>
+            <span class="li-clear">3</span> <span class="bold">Todas</span> as
+            caixas no pallet precisam ser escaneadas
+          </li>
+        </ol>
+        <small class="uppercase center">SKU</small>
+        <p id="ref-sku-display" class="center bold accent"></p>
+        <form id="new-barcode-form" action="">
+          <input
+            type="text"
+            id="new-barcode-input"
+            placeholder="Leia um código de barras..."
+            maxlength="13"
+          />
+        </form>
+        <small class="dim center">Caixas lidas</small>
+        <p id="box-counter" class="center bold"></p>
+        <div class="action-btns-container">
+          <div>
+            <button class="red-btn button" type="button">Cancelar</button>
+            <button class="yellow-btn button" type="button">Resetar</button>
+          </div>
+          <button class="accent-btn button" type="button">
+            Concluir conferência
+          </button>
+        </div>
       </section>
     </main>
     <script src="./script.js"></script>
