@@ -6,6 +6,31 @@ const refSKUDisplay = document.getElementById("ref-sku-display");
 const newBarcodeForm = document.getElementById("new-barcode-form");
 const newBarcodeInput = document.getElementById("new-barcode-input");
 const boxCounter = document.getElementById("box-counter");
+const cancelBtn = document.getElementById("cancel-btn");
+const modalMask = document.getElementById("modal-mask");
+const cancelModal = document.getElementById("cancel-modal");
+const cancelModalDeclineActBtn = document.getElementById(
+  "cancel-modal-decline-act-btn",
+);
+const cancelModalAcceptActBtn = document.getElementById(
+  "cancel-modal-accept-act-btn",
+);
+const resetBtn = document.getElementById("reset-btn");
+const resetModal = document.getElementById("reset-modal");
+const resetModalDeclineActBtn = document.getElementById(
+  "reset-modal-decline-act-btn",
+);
+const resetModalAcceptActBtn = document.getElementById(
+  "reset-modal-accept-act-btn",
+);
+const finishBtn = document.getElementById("finish-btn");
+const finishModal = document.getElementById("finish-modal");
+const finishModalDeclineActBtn = document.getElementById(
+  "finish-modal-decline-act-btn",
+);
+const finishModalAcceptActBtn = document.getElementById(
+  "finish-modal-accept-act-btn",
+);
 
 function clickySound(time, freq) {
   const o = ctx.createOscillator();
@@ -23,6 +48,29 @@ function clickySound(time, freq) {
 
   o.start(time);
   o.stop(time + 0.03);
+}
+
+function pluckSound(time) {
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+
+  o.type = "triangle";
+
+  o.frequency.setValueAtTime(523.25, time);
+  o.frequency.setValueAtTime(622.25, time + 0.11);
+  o.frequency.setValueAtTime(783.99, time + 0.23);
+
+  g.gain.setValueAtTime(0.2, time);
+  g.gain.exponentialRampToValueAtTime(0.00001, time + 0.1);
+  g.gain.setValueAtTime(0.2, time + 0.11);
+  g.gain.exponentialRampToValueAtTime(0.00001, time + 0.22);
+  g.gain.setValueAtTime(0.2, time + 0.23);
+  g.gain.exponentialRampToValueAtTime(0.00001, time + 0.5);
+
+  o.connect(g).connect(ctx.destination);
+
+  o.start();
+  o.stop(time + 0.5);
 }
 
 function warnSound(time) {
@@ -73,14 +121,14 @@ function blipSound(time) {
 
   o.frequency.setValueAtTime(10500, time);
   o.frequency.exponentialRampToValueAtTime(2700, time + 0.0025);
-  g.gain.setValueAtTime(0.1, time);
 
-  g.gain.exponentialRampToValueAtTime(0.00001, time + 1.2);
+  g.gain.setValueAtTime(0.1, time);
+  g.gain.exponentialRampToValueAtTime(0.00001, time + 1);
 
   o.connect(g).connect(ctx.destination);
 
   o.start();
-  o.stop(time + 1.2);
+  o.stop(time + 1);
 }
 
 function hideElements(elementIDs) {
@@ -157,18 +205,9 @@ document.getElementById("resume-inspect-btn").addEventListener("click", () => {
 });
 
 // #set-sku-sect
-document
-  .getElementById("cancel-set-sku-btn")
-  .addEventListener("click", async () => {
-    await ctx.resume();
-
-    const now = ctx.currentTime;
-
-    clickySound(now, 2300);
-    clickySound(now + 0.2, 1000);
-
-    hideElements(["set-sku-sect"]);
-  });
+document.getElementById("cancel-set-sku-btn").addEventListener("click", () => {
+  hideElements(["set-sku-sect"]);
+});
 
 refSKUForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -208,6 +247,7 @@ refSKUForm.addEventListener("submit", async (e) => {
   }
 });
 
+// #inspection-interface-sect
 newBarcodeForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -236,4 +276,73 @@ newBarcodeForm.addEventListener("submit", (e) => {
   blipSound(now);
   setBoxCounter(Number(localStorage.getItem("boxCount")) + 1);
   newBarcodeInput.value = "";
+});
+
+cancelBtn.addEventListener("click", () => {
+  modalMask.style.display = "flex";
+  cancelModal.style.display = "flex";
+});
+
+cancelModalDeclineActBtn.addEventListener("click", () => {
+  hideElements(["cancel-modal", "modal-mask"]);
+});
+
+cancelModalAcceptActBtn.addEventListener("click", async () => {
+  await ctx.resume();
+
+  const now = ctx.currentTime;
+
+  clickySound(now, 2300);
+  clickySound(now + 0.2, 1000);
+
+  clearBoxCounter();
+  clearReferenceSKU();
+  hideElements(["inspection-interface-sect", "cancel-modal", "modal-mask"]);
+});
+
+resetBtn.addEventListener("click", () => {
+  modalMask.style.display = "flex";
+  resetModal.style.display = "flex";
+});
+
+resetModalDeclineActBtn.addEventListener("click", () => {
+  hideElements(["reset-modal", "modal-mask"]);
+});
+
+resetModalAcceptActBtn.addEventListener("click", async () => {
+  await ctx.resume();
+
+  const now = ctx.currentTime;
+
+  clickySound(now, 2300);
+  clickySound(now + 0.2, 1000);
+
+  newBarcodeInput.value = "";
+  newBarcodeInput.placeholder = "Leia um código de barras...";
+
+  clearBoxCounter();
+
+  hideElements(["reset-modal", "modal-mask"]);
+
+  setBoxCounter(1);
+});
+
+finishBtn.addEventListener("click", () => {
+  modalMask.style.display = "flex";
+  finishModal.style.display = "flex";
+});
+
+finishModalDeclineActBtn.addEventListener("click", () => {
+  hideElements(["finish-modal", "modal-mask"]);
+});
+
+finishModalAcceptActBtn.addEventListener("click", () => {
+  const now = ctx.currentTime;
+
+  pluckSound(now);
+
+  clearBoxCounter();
+  clearReferenceSKU();
+
+  hideElements(["finish-modal", "modal-mask", "inspection-interface-sect"]);
 });

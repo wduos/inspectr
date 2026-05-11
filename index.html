@@ -102,12 +102,81 @@
         <p id="box-counter" class="center bold"></p>
         <div class="action-btns-container">
           <div>
-            <button class="red-btn button" type="button">Cancelar</button>
-            <button class="yellow-btn button" type="button">Resetar</button>
+            <button id="cancel-btn" class="red-btn button" type="button">
+              Cancelar
+            </button>
+            <button id="reset-btn" class="yellow-btn button" type="button">
+              Resetar
+            </button>
           </div>
-          <button class="accent-btn button" type="button">
+          <button id="finish-btn" class="accent-btn button" type="button">
             Concluir conferência
           </button>
+        </div>
+
+        <div id="modal-mask">
+          <div id="cancel-modal" class="modal">
+            <p class="center">
+              Tem certeza que deseja
+              <span class="red bold">cancelar a conferência</span>?
+            </p>
+            <button
+              id="cancel-modal-decline-act-btn"
+              class="clear-btn button"
+              type="button"
+            >
+              Voltar
+            </button>
+            <button
+              id="cancel-modal-accept-act-btn"
+              class="red-btn button"
+              type="button"
+            >
+              Cancelar conferência
+            </button>
+          </div>
+
+          <div id="reset-modal" class="modal">
+            <p class="center">
+              Tem certeza que deseja
+              <span class="yellow bold">reiniciar a conferência</span>?
+            </p>
+            <button
+              id="reset-modal-decline-act-btn"
+              class="clear-btn button"
+              type="button"
+            >
+              Voltar
+            </button>
+            <button
+              id="reset-modal-accept-act-btn"
+              class="yellow-btn button"
+              type="button"
+            >
+              Reiniciar conferência
+            </button>
+          </div>
+
+          <div id="finish-modal" class="modal">
+            <p class="center">
+              Tem certeza que deseja
+              <span class="accent bold">concluir a conferência</span>?
+            </p>
+            <button
+              id="finish-modal-decline-act-btn"
+              class="clear-btn button"
+              type="button"
+            >
+              Voltar
+            </button>
+            <button
+              id="finish-modal-accept-act-btn"
+              class="accent-btn button"
+              type="button"
+            >
+              Concluir conferência
+            </button>
+          </div>
         </div>
       </section>
     </main>
