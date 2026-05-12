@@ -2,10 +2,11 @@ const ctx = new (window.AudioContext || window.webkitAudioContext)();
 const refSKUForm = document.getElementById("ref-sku-form");
 const refSKUInput = document.getElementById("ref-sku-input");
 const refSKUMsg = document.getElementById("ref-sku-msg");
+const scanCodeForm = document.getElementById("scan-code-form");
+const scanCodeInput = document.getElementById("scan-code-input");
+const scanCodeSubmit = document.getElementById("scan-code-form-submit");
 const refSKUDisplay = document.getElementById("ref-sku-display");
-const newBarcodeForm = document.getElementById("new-barcode-form");
-const newBarcodeInput = document.getElementById("new-barcode-input");
-const boxCounter = document.getElementById("box-counter");
+const boxCounterDisplay = document.getElementById("box-counter-display");
 const cancelBtn = document.getElementById("cancel-btn");
 const modalMask = document.getElementById("modal-mask");
 const cancelModal = document.getElementById("cancel-modal");
@@ -154,7 +155,7 @@ function validateSKU(barcode) {
   }
 
   if (barcode.length < 13 || barcode.length > 13) {
-    return "A SKU deve ter exatamente 13 caracteres";
+    return "A SKU deve ter 11 caracteres";
   }
 
   if (!pattern.test(barcode)) {
@@ -171,7 +172,7 @@ function resetSKUInput() {
   refSKUMsg.classList.remove("red");
   refSKUMsg.classList.remove("green");
   refSKUMsg.innerHTML =
-    "Escaneie a <span class='bold'>SKU</span> de qualquer caixa do pallet para iniciar a conferência.";
+    "Escaneie a SKU de qualquer caixa do pallet para iniciar a conferência.";
 }
 
 function setReferenceSKU(code) {
@@ -186,15 +187,15 @@ function clearReferenceSKU() {
 
 function setBoxCounter(number) {
   localStorage.setItem("boxCount", number);
-  boxCounter.innerHTML = number;
+  boxCounterDisplay.innerHTML = number;
 }
 
 function clearBoxCounter() {
   localStorage.removeItem("boxCount");
-  boxCounter.innerHTML = "";
+  boxCounterDisplay.innerHTML = "";
 }
 
-// #init-prompt
+// #init-prompt-sect
 document.getElementById("new-inspect-btn").addEventListener("click", () => {
   resetSKUInput();
 
@@ -228,15 +229,11 @@ document
     newBarcodeInput.placeholder = "Leia um código de barras...";
 
     refSKUDisplay.innerHTML = localStorage.getItem("referenceSKU");
-    boxCounter.innerHTML = localStorage.getItem("boxCount");
+    boxCounterDisplay.innerHTML = localStorage.getItem("boxCount");
     showElements(["inspection-interface-sect"]);
   });
 
 // #set-sku-sect
-document.getElementById("cancel-set-sku-btn").addEventListener("click", () => {
-  hideElements(["set-sku-sect"]);
-});
-
 refSKUForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -292,6 +289,7 @@ newBarcodeForm.addEventListener("submit", (e) => {
     newBarcodeInput.placeholder = error;
     newBarcodeInput.classList.remove("green-input");
     newBarcodeInput.classList.add("red-input");
+    newBarcodeFormSubmit.style.backgroundColor = "var(--red)";
 
     return;
   } else if (barcode !== currentReference) {
@@ -301,6 +299,7 @@ newBarcodeForm.addEventListener("submit", (e) => {
     newBarcodeInput.placeholder = "A SKU é diferente da referência";
     newBarcodeInput.classList.remove("green-input");
     newBarcodeInput.classList.add("red-input");
+    newBarcodeFormSubmit.style.backgroundColor = "var(--red)";
 
     return;
   }
@@ -309,6 +308,7 @@ newBarcodeForm.addEventListener("submit", (e) => {
   setBoxCounter(Number(localStorage.getItem("boxCount")) + 1);
   newBarcodeInput.classList.remove("red-input");
   newBarcodeInput.classList.add("green-input");
+  newBarcodeFormSubmit.style.backgroundColor = "var(--green)";
   newBarcodeInput.value = "";
   newBarcodeInput.placeholder = "Leia um código de barras...";
 });
@@ -352,6 +352,9 @@ resetModalAcceptActBtn.addEventListener("click", async () => {
   clickySound(now, 2300);
   clickySound(now + 0.2, 1000);
 
+  newBarcodeInput.classList.remove("green-input");
+  newBarcodeInput.classList.remove("red-input");
+  newBarcodeFormSubmit.style.backgroundColor = "var(--accent)";
   newBarcodeInput.value = "";
   newBarcodeInput.placeholder = "Leia um código de barras...";
 
@@ -372,15 +375,18 @@ finishModalDeclineActBtn.addEventListener("click", () => {
 });
 
 finishModalAcceptActBtn.addEventListener("click", () => {
-  newBarcodeInput.classList.remove("green-input");
-  newBarcodeInput.classList.remove("red-input");
-
   const now = ctx.currentTime;
 
   pluckSound(now);
 
-  clearBoxCounter();
-  clearReferenceSKU();
+  setTimeout(() => {
+    newBarcodeInput.classList.remove("green-input");
+    newBarcodeInput.classList.remove("red-input");
+    newBarcodeFormSubmit.style.backgroundColor = "var(--accent)";
 
-  hideElements(["finish-modal", "modal-mask", "inspection-interface-sect"]);
+    clearBoxCounter();
+    clearReferenceSKU();
+
+    hideElements(["finish-modal", "modal-mask", "inspection-interface-sect"]);
+  }, 500);
 });

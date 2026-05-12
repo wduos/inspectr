@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>inspectr</title>
+    <title>inspectr - Conferências mais eficientes</title>
     <link
       rel="shortcut icon"
       href="./assets/graphics/favicon-v2.svg"
@@ -12,21 +12,26 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <main>
-      <section id="init-prompt">
+    <main class="flex-center">
+      <section id="init-prompt-sect">
         <div>
           <div></div>
         </div>
         <img src="./assets/graphics/logo-v2.svg" alt="Logomarca inspectr" />
         <small class="center">Conferências mais eficientes</small>
-        <button id="new-inspect-btn" class="accent-btn button" type="button">
+        <button
+          id="new-inspect-btn"
+          class="accent-btn button flex-center"
+          type="button"
+        >
           Começar
-          <img
-            src="./assets/graphics/icon-scan.svg"
-            alt="ícone de código de barras"
-          />
+          <img src="./assets/graphics/icon-scan.svg" alt="ícone de scanner" />
         </button>
-        <button id="resume-inspect-btn" type="button" class="clear-btn button">
+        <button
+          id="resume-inspect-btn"
+          class="clear-btn button flex-center"
+          type="button"
+        >
           Retomar conferência
           <img
             src="./assets/graphics/icon-reverse-clock.svg"
@@ -37,27 +42,30 @@
 
       <section id="set-sku-sect">
         <h2>
-          <img src="./assets/graphics/icon-scan-alt.svg" alt="Ícone de scan" />
-          Nova Conferência
+          <img
+            src="./assets/graphics/icon-scan-alt.svg"
+            alt="Ícone de scanner"
+          />
+          Nova conferência
         </h2>
-        <form id="ref-sku-form" action="">
+        <form id="ref-sku-form">
           <input
-            type="text"
             id="ref-sku-input"
-            placeholder="Ex.: (240)10221234"
-            maxlength="13"
+            type="text"
+            placeholder="Ex.: 24010221234"
+            maxlength="11"
           />
           <p id="ref-sku-msg" class="center">
-            Escaneie a <span class="bold">SKU</span> de qualquer caixa do pallet
-            para iniciar a conferência.
+            Escaneie a SKU de qualquer caixa do pallet para iniciar a
+            conferência.
           </p>
           <div class="action-btns-container">
-            <small class="center dim">Somente SKUs válidas serão aceitas</small>
+            <small class="center dim">Somente SKUs válidas são aceitas</small>
             <input class="accent-btn button" type="submit" value="Confirmar" />
             <button
-              id="cancel-set-sku-btn"
               class="clear-btn button"
               type="button"
+              onclick="hideElements(['set-sku-sect'])"
             >
               Cancelar
             </button>
@@ -73,40 +81,47 @@
           />
           Conferindo pallet
         </h2>
-        <p>Continue escaneando as outras caixas no pallet</p>
         <ol>
           <li>
-            <span class="li-clear-alt">1</span> Escaneie somente SKUs
-            <span class="bold">válidas</span>
+            <span class="accent bold">1</span>
+            Escaneie <span class="bold">todas as caixas</span> no pallet
           </li>
           <li>
-            <span class="li-clear">2</span> Todos as caixas precisam ter a
+            <span class="accent bold">2</span> Todas precisam ter a
             <span class="bold">mesma SKU</span>
           </li>
           <li>
-            <span class="li-clear">3</span> <span class="bold">Todas</span> as
-            caixas no pallet precisam ser escaneadas
+            <span class="accent bold">3</span>
+            Somente escaneie SKUs
+            <span class="bold">válidas</span>
           </li>
         </ol>
-        <small class="uppercase center">SKU</small>
-        <p id="ref-sku-display" class="center bold accent"></p>
-        <form id="new-barcode-form" action="">
+        <div id="inspection-display-container">
+          <div>
+            <p id="ref-sku-display" class="bold accent"></p>
+            <small class="dim uppercase bold">SKU</small>
+          </div>
+          <div>
+            <p id="box-counter-display" class="bold right"></p>
+            <small class="dim uppercase bold right">Caixas lidas</small>
+          </div>
+        </div>
+        <form id="scan-code-form" class="flex-center" action="">
           <input
             type="text"
-            id="new-barcode-input"
+            id="scan-code-input"
             placeholder="Leia um código de barras..."
-            maxlength="13"
+            maxlength="11"
           />
+          <input id="scan-code-submit" type="submit" />
         </form>
-        <small class="dim center">Caixas lidas</small>
-        <p id="box-counter" class="center bold"></p>
         <div class="action-btns-container">
-          <div>
+          <div class="flex-center">
             <button id="cancel-btn" class="red-btn button" type="button">
               Cancelar
             </button>
             <button id="reset-btn" class="yellow-btn button" type="button">
-              Resetar
+              Reiniciar
             </button>
           </div>
           <button id="finish-btn" class="accent-btn button" type="button">
@@ -181,8 +196,8 @@
       </section>
 
       <div id="toast">
-        <img src="./assets/graphics/icon-warn.svg" alt="Ícone de aviso" />
         <small class="dim">Não há conferências para retomar</small>
+        <img src="./assets/graphics/icon-warn.svg" alt="Ícone de aviso" />
       </div>
     </main>
     <script src="./script.js"></script>
