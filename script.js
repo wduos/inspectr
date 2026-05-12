@@ -1,10 +1,11 @@
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
 const refSKUForm = document.getElementById("ref-sku-form");
 const refSKUInput = document.getElementById("ref-sku-input");
 const refSKUMsg = document.getElementById("ref-sku-msg");
 const scanCodeForm = document.getElementById("scan-code-form");
 const scanCodeInput = document.getElementById("scan-code-input");
-const scanCodeSubmit = document.getElementById("scan-code-form-submit");
+const scanCodeSubmit = document.getElementById("scan-code-submit");
 const refSKUDisplay = document.getElementById("ref-sku-display");
 const boxCounterDisplay = document.getElementById("box-counter-display");
 const cancelBtn = document.getElementById("cancel-btn");
@@ -33,6 +34,209 @@ const finishModalAcceptActBtn = document.getElementById(
   "finish-modal-accept-act-btn",
 );
 const toast = document.getElementById("toast");
+
+// #init-prompt-sect
+document.getElementById("new-inspect-btn").addEventListener("click", () => {
+  resetSKUInput();
+  showElements(["set-sku-sect"]);
+});
+
+document
+  .getElementById("resume-inspect-btn")
+  .addEventListener("click", async () => {
+    await ctx.resume();
+    const now = ctx.currentTime;
+
+    if (!localStorage.getItem("referenceSKU")) {
+      warnSound(now);
+
+      toast.style.top = "1rem";
+
+      setTimeout(() => {
+        toast.style.top = "-5rem";
+      }, 2000);
+
+      return;
+    }
+
+    resetScanCodeInput();
+
+    refSKUDisplay.innerHTML = localStorage.getItem("referenceSKU");
+    boxCounterDisplay.innerHTML = localStorage.getItem("boxCount");
+    showElements(["inspection-interface-sect"]);
+
+    clickySound(now, 1000);
+    clickySound(now + 0.12, 1700);
+    clickySound(now + 0.2, 2300);
+  });
+
+// #set-sku-sect
+refSKUForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  await ctx.resume();
+  const now = ctx.currentTime;
+  const SKU = e.target.elements[0].value;
+  const error = validateSKU(SKU);
+
+  if (error) {
+    refSKUInput.value = "";
+    refSKUInput.classList.add("red-input");
+    refSKUMsg.classList.add("red");
+    refSKUMsg.innerHTML = error;
+  } else {
+    refSKUInput.classList.add("green-input");
+    refSKUMsg.classList.add("green");
+    refSKUMsg.innerHTML = "Aceito";
+
+    resetScanCodeInput();
+
+    clickySound(now, 1000);
+    clickySound(now + 0.12, 1700);
+    clickySound(now + 0.2, 2300);
+
+    setReferenceSKU(SKU);
+    setBoxCounter(1);
+
+    setTimeout(() => {
+      hideElements(["set-sku-sect"]);
+      resetSKUInput();
+      showElements(["inspection-interface-sect"]);
+    }, 1500);
+  }
+});
+
+// #inspection-interface-sect
+scanCodeForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const currentReference = localStorage.getItem("referenceSKU");
+  const barcode = e.target.elements[0].value;
+  const now = ctx.currentTime;
+
+  const error = validateSKU(barcode);
+
+  scanCodeInput.focus();
+
+  if (error) {
+    warnSound(now);
+
+    scanCodeInput.value = "";
+    scanCodeInput.placeholder = error;
+
+    tintScanCodeForm("red");
+
+    return;
+  } else if (barcode !== currentReference) {
+    errorSound(now);
+
+    scanCodeInput.value = "";
+    scanCodeInput.placeholder = "A SKU é diferente da referência";
+
+    tintScanCodeForm("red");
+
+    return;
+  }
+
+  blipSound(now);
+  setBoxCounter(Number(localStorage.getItem("boxCount")) + 1);
+
+  tintScanCodeForm("green");
+  resetScanCodeInput();
+});
+
+cancelBtn.addEventListener("click", () => {
+  modalMask.style.display = "flex";
+  cancelModal.style.display = "flex";
+});
+
+cancelModalDeclineActBtn.addEventListener("click", () => {
+  hideElements(["cancel-modal", "modal-mask"]);
+});
+
+cancelModalAcceptActBtn.addEventListener("click", async () => {
+  await ctx.resume();
+  const now = ctx.currentTime;
+
+  clickySound(now, 2300);
+  clickySound(now + 0.2, 1000);
+
+  tintScanCodeForm();
+
+  clearBoxCounter();
+  clearReferenceSKU();
+
+  hideElements(["inspection-interface-sect", "cancel-modal", "modal-mask"]);
+});
+
+resetBtn.addEventListener("click", () => {
+  modalMask.style.display = "flex";
+  resetModal.style.display = "flex";
+});
+
+resetModalDeclineActBtn.addEventListener("click", () => {
+  hideElements(["reset-modal", "modal-mask"]);
+});
+
+resetModalAcceptActBtn.addEventListener("click", async () => {
+  await ctx.resume();
+  const now = ctx.currentTime;
+
+  clickySound(now, 2300);
+  clickySound(now + 0.2, 1000);
+
+  tintScanCodeForm();
+
+  resetScanCodeInput();
+  clearBoxCounter();
+
+  hideElements(["reset-modal", "modal-mask"]);
+
+  setBoxCounter(1);
+});
+
+finishBtn.addEventListener("click", () => {
+  modalMask.style.display = "flex";
+  finishModal.style.display = "flex";
+});
+
+finishModalDeclineActBtn.addEventListener("click", () => {
+  hideElements(["finish-modal", "modal-mask"]);
+});
+
+finishModalAcceptActBtn.addEventListener("click", () => {
+  const now = ctx.currentTime;
+  pluckSound(now);
+
+  setTimeout(() => {
+    tintScanCodeForm();
+
+    clearBoxCounter();
+    clearReferenceSKU();
+
+    hideElements(["finish-modal", "modal-mask", "inspection-interface-sect"]);
+  }, 500);
+});
+
+function validateSKU(code) {
+  const pattern = /^240\d{8}$/;
+
+  if (!code) {
+    return "A SKU é obrigatória";
+  }
+
+  if (code.length < 11 || code.length > 11) {
+    return "A SKU deve ter 11 caracteres";
+  }
+
+  if (!pattern.test(code)) {
+    return "Escaneie uma SKU válida";
+  }
+
+  return null;
+}
+
+// SFX >>>>
 
 function clickySound(time, freq) {
   const o = ctx.createOscillator();
@@ -115,7 +319,6 @@ function errorSound(time) {
 }
 
 function blipSound(time) {
-  console.log("sdasd");
   const o = ctx.createOscillator();
   const g = ctx.createGain();
 
@@ -133,6 +336,10 @@ function blipSound(time) {
   o.stop(time + 1);
 }
 
+// <<<< SFX
+
+// UI manipulation >>>>
+
 function hideElements(elementIDs) {
   elementIDs.forEach((elementID) => {
     const el = document.getElementById(elementID);
@@ -147,24 +354,6 @@ function showElements(elementIDs) {
   });
 }
 
-function validateSKU(barcode) {
-  const pattern = /^\(240\)\d{8}$/;
-
-  if (!barcode) {
-    return "A SKU é obrigatória";
-  }
-
-  if (barcode.length < 13 || barcode.length > 13) {
-    return "A SKU deve ter 11 caracteres";
-  }
-
-  if (!pattern.test(barcode)) {
-    return "Escaneie uma SKU válida";
-  }
-
-  return null;
-}
-
 function resetSKUInput() {
   refSKUInput.value = "";
   refSKUInput.classList.remove("red-input");
@@ -174,6 +363,35 @@ function resetSKUInput() {
   refSKUMsg.innerHTML =
     "Escaneie a SKU de qualquer caixa do pallet para iniciar a conferência.";
 }
+
+function resetScanCodeInput() {
+  scanCodeInput.value = "";
+  scanCodeInput.placeholder = "Leia um código de barras...";
+}
+
+function tintScanCodeForm(color) {
+  switch (color) {
+    case "red":
+      scanCodeInput.classList.remove("green-input");
+      scanCodeInput.classList.add("red-input");
+      scanCodeSubmit.style.backgroundColor = "var(--red)";
+
+      break;
+    case "green":
+      scanCodeInput.classList.remove("red-input");
+      scanCodeInput.classList.add("green-input");
+      scanCodeSubmit.style.backgroundColor = "var(--green)";
+
+      break;
+    default:
+      scanCodeInput.classList.remove("red-input", "green-input");
+      scanCodeSubmit.style.backgroundColor = "var(--accent)";
+  }
+}
+
+// <<<< UI manipulation
+
+// localStorage stuff >>>>
 
 function setReferenceSKU(code) {
   localStorage.setItem("referenceSKU", code);
@@ -195,198 +413,4 @@ function clearBoxCounter() {
   boxCounterDisplay.innerHTML = "";
 }
 
-// #init-prompt-sect
-document.getElementById("new-inspect-btn").addEventListener("click", () => {
-  resetSKUInput();
-
-  showElements(["set-sku-sect"]);
-});
-
-document
-  .getElementById("resume-inspect-btn")
-  .addEventListener("click", async () => {
-    await ctx.resume();
-
-    const now = ctx.currentTime;
-
-    if (!localStorage.getItem("referenceSKU")) {
-      warnSound(now);
-
-      toast.style.top = "1rem";
-
-      setTimeout(() => {
-        toast.style.top = "-5rem";
-      }, 2000);
-
-      return;
-    }
-
-    clickySound(now, 1000);
-    clickySound(now + 0.12, 1700);
-    clickySound(now + 0.2, 2300);
-
-    newBarcodeInput.value = "";
-    newBarcodeInput.placeholder = "Leia um código de barras...";
-
-    refSKUDisplay.innerHTML = localStorage.getItem("referenceSKU");
-    boxCounterDisplay.innerHTML = localStorage.getItem("boxCount");
-    showElements(["inspection-interface-sect"]);
-  });
-
-// #set-sku-sect
-refSKUForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const SKU = e.target.elements[0].value;
-
-  const error = validateSKU(SKU);
-
-  if (error) {
-    refSKUInput.value = "";
-    refSKUInput.classList.add("red-input");
-    refSKUMsg.classList.add("red");
-    refSKUMsg.innerHTML = error;
-  } else {
-    refSKUInput.classList.add("green-input");
-    refSKUMsg.classList.add("green");
-    refSKUMsg.innerHTML = "Aceito";
-    newBarcodeInput.value = "";
-    newBarcodeInput.placeholder = "Leia um código de barras...";
-
-    await ctx.resume();
-
-    const now = ctx.currentTime;
-
-    clickySound(now, 1000);
-    clickySound(now + 0.12, 1700);
-    clickySound(now + 0.2, 2300);
-
-    setReferenceSKU(SKU);
-    setBoxCounter(1);
-
-    setTimeout(() => {
-      hideElements(["set-sku-sect"]);
-      resetSKUInput();
-      showElements(["inspection-interface-sect"]);
-    }, 1500);
-  }
-});
-
-// #inspection-interface-sect
-newBarcodeForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  const currentReference = localStorage.getItem("referenceSKU");
-  const barcode = e.target.elements[0].value;
-  const now = ctx.currentTime;
-
-  const error = validateSKU(barcode);
-
-  if (error) {
-    warnSound(now);
-
-    newBarcodeInput.value = "";
-    newBarcodeInput.placeholder = error;
-    newBarcodeInput.classList.remove("green-input");
-    newBarcodeInput.classList.add("red-input");
-    newBarcodeFormSubmit.style.backgroundColor = "var(--red)";
-
-    return;
-  } else if (barcode !== currentReference) {
-    errorSound(now);
-
-    newBarcodeInput.value = "";
-    newBarcodeInput.placeholder = "A SKU é diferente da referência";
-    newBarcodeInput.classList.remove("green-input");
-    newBarcodeInput.classList.add("red-input");
-    newBarcodeFormSubmit.style.backgroundColor = "var(--red)";
-
-    return;
-  }
-
-  blipSound(now);
-  setBoxCounter(Number(localStorage.getItem("boxCount")) + 1);
-  newBarcodeInput.classList.remove("red-input");
-  newBarcodeInput.classList.add("green-input");
-  newBarcodeFormSubmit.style.backgroundColor = "var(--green)";
-  newBarcodeInput.value = "";
-  newBarcodeInput.placeholder = "Leia um código de barras...";
-});
-
-cancelBtn.addEventListener("click", () => {
-  modalMask.style.display = "flex";
-  cancelModal.style.display = "flex";
-});
-
-cancelModalDeclineActBtn.addEventListener("click", () => {
-  hideElements(["cancel-modal", "modal-mask"]);
-});
-
-cancelModalAcceptActBtn.addEventListener("click", async () => {
-  await ctx.resume();
-
-  const now = ctx.currentTime;
-
-  clickySound(now, 2300);
-  clickySound(now + 0.2, 1000);
-
-  clearBoxCounter();
-  clearReferenceSKU();
-  hideElements(["inspection-interface-sect", "cancel-modal", "modal-mask"]);
-});
-
-resetBtn.addEventListener("click", () => {
-  modalMask.style.display = "flex";
-  resetModal.style.display = "flex";
-});
-
-resetModalDeclineActBtn.addEventListener("click", () => {
-  hideElements(["reset-modal", "modal-mask"]);
-});
-
-resetModalAcceptActBtn.addEventListener("click", async () => {
-  await ctx.resume();
-
-  const now = ctx.currentTime;
-
-  clickySound(now, 2300);
-  clickySound(now + 0.2, 1000);
-
-  newBarcodeInput.classList.remove("green-input");
-  newBarcodeInput.classList.remove("red-input");
-  newBarcodeFormSubmit.style.backgroundColor = "var(--accent)";
-  newBarcodeInput.value = "";
-  newBarcodeInput.placeholder = "Leia um código de barras...";
-
-  clearBoxCounter();
-
-  hideElements(["reset-modal", "modal-mask"]);
-
-  setBoxCounter(1);
-});
-
-finishBtn.addEventListener("click", () => {
-  modalMask.style.display = "flex";
-  finishModal.style.display = "flex";
-});
-
-finishModalDeclineActBtn.addEventListener("click", () => {
-  hideElements(["finish-modal", "modal-mask"]);
-});
-
-finishModalAcceptActBtn.addEventListener("click", () => {
-  const now = ctx.currentTime;
-
-  pluckSound(now);
-
-  setTimeout(() => {
-    newBarcodeInput.classList.remove("green-input");
-    newBarcodeInput.classList.remove("red-input");
-    newBarcodeFormSubmit.style.backgroundColor = "var(--accent)";
-
-    clearBoxCounter();
-    clearReferenceSKU();
-
-    hideElements(["finish-modal", "modal-mask", "inspection-interface-sect"]);
-  }, 500);
-});
+// <<<< localStorage stuff
