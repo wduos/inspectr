@@ -43,12 +43,14 @@
 
       <div id="inspection-info" class="toggle-2">
         <div>
-          <p id="ref-sku" class="bold accent">24012345678</p>
-          <small class="bold dim">SKU</small>
-        </div>
-        <div>
-          <p id="box-count" class="right bold">4</p>
-          <small class="right bold dim">CAIXAS LIDAS</small>
+          <div>
+            <p id="ref-sku" class="bold accent">24012345678</p>
+            <small class="bold dim">SKU</small>
+          </div>
+          <div>
+            <p id="box-count" class="right bold">4</p>
+            <small class="right bold dim">CAIXAS LIDAS</small>
+          </div>
         </div>
       </div>
 
@@ -56,6 +58,10 @@
         <input
           id="input"
           type="text"
+          inputmode="none"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="off"
           placeholder="Ex.: 24010221234"
           maxlength="11"
         />
@@ -65,25 +71,18 @@
             >Somente SKUs válidas são aceitas</small
           >
           <button
-            id="confirm-btn"
+            id="finish-btn"
             class="button accent-btn toggle-2"
             type="button"
           >
             Finalizar
           </button>
           <button
-            id="cancel-btn"
+            id="restart-btn"
             class="button clear-btn toggle-2"
             type="button"
           >
             Reiniciar
-          </button>
-          <button
-            id="confirm-btn"
-            class="button accent-btn toggle-1"
-            type="button"
-          >
-            Confirmar
           </button>
           <button
             id="cancel-btn"
@@ -99,7 +98,7 @@
         <div id="modal">
           <p class="center">
             Tem certeza que deseja
-            <span id="modal-action" class="bold">finalizar a conferência</span>?
+            <span id="modal-action" class="bold">finalizar conferência</span>?
           </p>
           <button
             id="modal-decline-action-btn"
@@ -126,11 +125,11 @@
         </div>
         <img src="./assets/graphics/logo-v2.svg" alt="Logomarca" />
         <small class="center">Conferências mais eficientes</small>
-        <button class="button accent-btn" type="button">
+        <button id="home-start-btn" class="button accent-btn" type="button">
           Começar
           <img src="./assets/graphics/icon-scan.svg" alt="ícone de scanner" />
         </button>
-        <button class="button clear-btn" type="button">
+        <button id="home-restart-btn" class="button clear-btn" type="button">
           Retomar conferência
           <img
             src="./assets/graphics/icon-reverse-clock.svg"

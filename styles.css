@@ -74,6 +74,10 @@ body {
   border: 2px solid var(--accent);
   color: var(--accent);
 }
+.red-btn {
+  background-color: var(--red);
+  color: white;
+}
 .dim {
   color: var(--dim);
 }
@@ -97,13 +101,30 @@ body {
   gap: 1rem;
   width: 100%;
 }
+.red-input {
+  border: solid 2px var(--red) !important;
+  background-color: var(--red-tint) !important;
+  color: var(--red) !important;
+}
+.red-input:focus {
+  outline: solid 2px var(--red-opaque) !important;
+  box-shadow: 0px 0px 15px var(--red-opaque) !important;
+}
+.green-input {
+  border: solid 2px var(--green) !important;
+  background-color: var(--green-tint) !important;
+  color: var(--green-alt) !important;
+}
+.green-input:focus {
+  outline: solid 2px var(--green-opaque) !important;
+  box-shadow: 0px 0px 15px var(--green-opaque) !important;
+}
 
 #home {
   position: absolute;
   top: 0;
   left: 0;
-  /* display: flex; */
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   width: 100vw;
@@ -199,9 +220,12 @@ ol > li {
 
 #inspection-info {
   display: none;
+  margin-block: 1.5rem 0.5rem;
+}
+#inspection-info > div {
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-block: 1.5rem 0.5rem;
 }
 #ref-sku,
 #box-count {
@@ -223,7 +247,7 @@ ol > li {
   z-index: 10;
 }
 #modal {
-  display: none;
+  display: flex;
   align-items: center;
   flex-direction: column;
   gap: 1rem;
